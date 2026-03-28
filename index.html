@@ -226,21 +226,12 @@
     <!-- ═══════════ SUN ═══════════
          • sun.png  → billboard glow sprite (always faces camera)
          • 2k_sun.jpg → surface texture on the sphere                 -->
-    <a-image src="#tex_sun_sprite"
-      position="0 0 0" width="20" height="20"
-      material="shader: flat; transparent: true; opacity: 0.50; blending: additive"
-      look-at="[camera]"
-    ></a-image>
     <a-sphere id="sun"
       position="0 0 0" radius="5.0"
       segments-height="64" segments-width="64"
       material="src: #tex_sun; shader: flat"
       animation="property: rotation; to: 0 360 0; dur: 60000; easing: linear; loop: true"
     ></a-sphere>
-    <a-text value="THE SUN" position="0 7.0 0"
-      align="center" color="#ffd580" width="14"
-      material="shader: flat"
-    ></a-text>
     <!-- Corona glow -->
     <a-sphere position="0 0 0" radius="5.7"
       material="color:#ff9900; opacity:0.10; transparent:true; side:back; shader:flat"></a-sphere>
@@ -279,9 +270,9 @@
           material="src: #tex_mercury; roughness: 0.95; metalness: 0.0; shader: standard"
           animation="property: rotation; to: 0 360 0; dur: 9616; easing: linear; loop: true"
         ></a-sphere>
-        <a-text value="MERCURY" position="0 1.1 0"
+        <a-text transparent="true" value="MERCURY" position="0 1.1 0"
           align="center" color="#c8b8a8" width="6"
-          material="shader: flat"
+          material="shader: flat; transparent: true"
         ></a-text>
       </a-entity>
     </a-entity>
@@ -302,9 +293,9 @@
           material="src: #tex_venus_atmosphere; shader: flat; transparent: true; opacity: 0.52; side: front"
           animation="property: rotation; from: 0 310 0; to: 0 0 0; dur: 52000; easing: linear; loop: true"
         ></a-sphere>
-        <a-text value="VENUS" position="0 1.9 0"
+        <a-text transparent="true" value="VENUS" position="0 1.9 0"
           align="center" color="#f5dfa0" width="6"
-          material="shader: flat"
+          material="shader: flat; transparent: true"
         ></a-text>
       </a-entity>
     </a-entity>
@@ -320,9 +311,9 @@
           material="src: #tex_earth_daymap; roughness: 0.62; metalness: 0.0; shader: standard"
           animation="property: rotation; to: 0 360 0; dur: 10000; easing: linear; loop: true"
         ></a-sphere>
-        <a-text value="EARTH" position="0 2.0 0"
+        <a-text transparent="true" value="EARTH" position="0 2.0 0"
           align="center" color="#7ec8e3" width="6"
-          material="shader: flat"
+          material="shader: flat; transparent: true"
         ></a-text>
         <!-- Moon orbiting Earth -->
         <a-entity
@@ -347,9 +338,9 @@
           material="src: #tex_mars; roughness: 0.90; metalness: 0.0; shader: standard"
           animation="property: rotation; to: 0 360 0; dur: 10300; easing: linear; loop: true"
         ></a-sphere>
-        <a-text value="MARS" position="0 1.5 0"
+        <a-text transparent="true" value="MARS" position="0 1.5 0"
           align="center" color="#e06030" width="6"
-          material="shader: flat"
+          material="shader: flat; transparent: true"
         ></a-text>
       </a-entity>
     </a-entity>
@@ -365,9 +356,9 @@
           material="src: #tex_jupiter; roughness: 0.72; metalness: 0.0; shader: standard"
           animation="property: rotation; to: 0 360 0; dur: 4200; easing: linear; loop: true"
         ></a-sphere>
-        <a-text value="JUPITER" position="0 4.5 0"
+        <a-text transparent="true" value="JUPITER" position="0 4.5 0"
           align="center" color="#c8a878" width="8"
-          material="shader: flat"
+          material="shader: flat; transparent: true"
         ></a-text>
       </a-entity>
     </a-entity>
@@ -393,9 +384,9 @@
             material="color:#000000; transparent:false; side:double; shader:flat"
           ></a-circle>
         </a-entity>
-        <a-text value="SATURN" position="0 4.8 0"
+        <a-text transparent="true" value="SATURN" position="0 4.8 0"
           align="center" color="#e8d8a0" width="8"
-          material="shader: flat"
+          material="shader: flat; transparent: true"
         ></a-text>
       </a-entity>
     </a-entity>
@@ -412,9 +403,9 @@
           material="src: #tex_uranus; roughness: 0.85; metalness: 0.0; shader: standard"
           animation="property: rotation; to: 0 360 360; dur: 6200; easing: linear; loop: true"
         ></a-sphere>
-        <a-text value="URANUS" position="0 3.0 0"
+        <a-text transparent="true" value="URANUS" position="0 3.0 0"
           align="center" color="#a8d8e8" width="8"
-          material="shader: flat"
+          material="shader: flat; transparent: true"
         ></a-text>
       </a-entity>
     </a-entity>
@@ -430,9 +421,9 @@
           material="src: #tex_neptune; roughness: 0.85; metalness: 0.0; shader: standard"
           animation="property: rotation; to: 0 360 0; dur: 5800; easing: linear; loop: true"
         ></a-sphere>
-        <a-text value="NEPTUNE" position="0 2.9 0"
+        <a-text transparent="true" value="NEPTUNE" position="0 2.9 0"
           align="center" color="#5080d0" width="8"
-          material="shader: flat"
+          material="shader: flat; transparent: true"
         ></a-text>
       </a-entity>
     </a-entity>
