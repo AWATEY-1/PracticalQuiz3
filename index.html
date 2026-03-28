@@ -10,6 +10,64 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { overflow: hidden; background: #000; font-family: 'Exo 2', sans-serif; }
 
+    /* ── Custom loader overlay ── */
+    #loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #000;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 32px;
+      transition: opacity 0.9s ease;
+    }
+    #loader.fade-out { opacity: 0; pointer-events: none; }
+
+    /* Animated solar ring */
+    .loader-ring {
+      position: relative; width: 110px; height: 110px;
+    }
+    .loader-ring svg { width: 100%; height: 100%; animation: spin 2s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-ring .sun-dot {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 30px; height: 30px; border-radius: 50%;
+      background: radial-gradient(circle, #fff8c0 0%, #ffaa00 55%, #ff4400 100%);
+      box-shadow: 0 0 24px 8px rgba(255,160,40,0.7), 0 0 60px 20px rgba(255,80,0,0.3);
+      animation: sunpulse 2s ease-in-out infinite;
+    }
+    @keyframes sunpulse {
+      0%,100% { box-shadow: 0 0 24px 8px rgba(255,160,40,0.7), 0 0 60px 20px rgba(255,80,0,0.3); }
+      50%      { box-shadow: 0 0 36px 14px rgba(255,180,60,0.9), 0 0 80px 30px rgba(255,100,0,0.5); }
+    }
+
+    #loader-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 22px; font-weight: 700;
+      letter-spacing: 10px; text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 0 30px rgba(255,200,80,0.8), 0 0 60px rgba(255,120,0,0.4);
+    }
+    #loader-sub {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 11px; font-weight: 300;
+      letter-spacing: 4px; color: rgba(255,220,150,0.45);
+      text-transform: uppercase;
+    }
+
+    /* Progress bar */
+    #loader-bar-wrap {
+      width: 220px; height: 2px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px; overflow: hidden;
+    }
+    #loader-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #ff6600, #ffcc00);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px #ffaa33;
+    }
+
+    /* ── Title bar ── */
     #title-bar {
       position: fixed; top: 0; left: 0; right: 0;
       display: flex; align-items: center; justify-content: center;
@@ -22,16 +80,6 @@
       letter-spacing: 6px; text-transform: uppercase;
       color: #fff; opacity: 0.9;
       text-shadow: 0 0 24px rgba(255, 200, 80, 0.5);
-    }
-    #title-bar .dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #ffaa33; box-shadow: 0 0 12px #fa0, 0 0 24px #f60;
-      margin-right: 14px;
-      animation: pulse 2.4s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50%      { opacity: 0.35; transform: scale(0.6); }
     }
 
     #planet-panel {
@@ -88,8 +136,29 @@
 </head>
 <body>
 
+  <!-- ── Custom loading screen ── -->
+  <div id="loader">
+    <div class="loader-ring">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="44" stroke="rgba(255,255,255,0.06)" stroke-width="2"/>
+        <circle cx="50" cy="50" r="44" stroke="url(#arc)" stroke-width="2"
+          stroke-linecap="round" stroke-dasharray="80 196"/>
+        <defs>
+          <linearGradient id="arc" x1="0" y1="0" x2="100" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ff6600"/>
+            <stop offset="100%" stop-color="#ffcc00"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="sun-dot"></div>
+    </div>
+    <div id="loader-title">Solar System</div>
+    <div id="loader-sub">Loading textures&hellip;</div>
+    <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
+  </div>
+
+  <!-- ── Title bar (single text, no dot) ── -->
   <div id="title-bar">
-    <div class="dot"></div>
     <h1>Solar System</h1>
   </div>
 
@@ -112,6 +181,7 @@
     background="color: #00000d"
     renderer="antialias: true; colorManagement: true"
     vr-mode-ui="enabled: false"
+    loading-screen="enabled: false"
   >
 
     <!-- ═══════════ ASSETS ═══════════ -->
@@ -370,6 +440,28 @@
   </a-scene>
 
   <script>
+    // ── Loader ──
+    const loader  = document.getElementById('loader');
+    const loaderBar = document.getElementById('loader-bar');
+    const loaderSub = document.getElementById('loader-sub');
+
+    // Animate progress bar while assets load
+    let fakeProgress = 0;
+    const barInterval = setInterval(() => {
+      fakeProgress = Math.min(fakeProgress + Math.random() * 4, 88);
+      loaderBar.style.width = fakeProgress + '%';
+    }, 120);
+
+    document.querySelector('a-scene').addEventListener('loaded', () => {
+      clearInterval(barInterval);
+      loaderBar.style.width = '100%';
+      loaderSub.textContent = 'Entering orbit…';
+      setTimeout(() => {
+        loader.classList.add('fade-out');
+        setTimeout(() => loader.remove(), 950);
+      }, 500);
+    });
+
     const BASE_DUR = {
       'mercury-orbit': 14448,
       'venus-orbit':   36912,
